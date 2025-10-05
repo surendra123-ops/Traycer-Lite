@@ -30,12 +30,4 @@ export class PlanController {
   getPlanHistory(): PlanResponse[] {
     return this.model.getPlanHistory();
   }
-
-  copyToClipboard(format: 'json' | 'markdown'): Promise<void> {
-    const text = format === 'json' 
-      ? this.model.exportToJSON()
-      : this.model.exportToMarkdown();
-    
-    return navigator.clipboard.writeText(text);
-  }
 }

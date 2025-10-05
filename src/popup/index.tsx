@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { InputForm } from './views/InputForm';
 import { PlanView } from './views/PlanView';
@@ -14,7 +14,7 @@ const App: React.FC = () => {
   const model = new PlanModel();
   const controller = new PlanController(model);
 
-  const handleGenerate = async (idea: string, mode: 'rule' | 'ai') => {
+  const handleGenerate = async (idea: string, mode: 'rule' | 'ai'): Promise<void> => {
     setIsLoading(true);
     setError(null);
     
@@ -23,37 +23,28 @@ const App: React.FC = () => {
       setCurrentPlan(response);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
+      throw err; // Re-throw so InputForm knows generation failed
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleCopy = async (format: 'json' | 'markdown') => {
-    try {
-      await controller.copyToClipboard(format);
-      // Could add a toast notification here
-    } catch (err) {
-      setError('Failed to copy to clipboard');
-    }
-  };
-
   return (
-    <div className="w-96 p-4 bg-white">
-      <div className="mb-4">
-        <h1 className="text-xl font-bold text-gray-800">Traycer Lite</h1>
-        <p className="text-sm text-gray-600">Convert ideas into structured plans</p>
+    <div className="w-96 bg-white">
+      <div className="p-4 border-b border-gray-200">
+        <h1 className="text-lg font-semibold text-gray-900">Traycer Lite</h1>
       </div>
 
-      <InputForm onGenerate={handleGenerate} isLoading={isLoading} />
+      <div className="p-4 space-y-4">
+        <InputForm onGenerate={handleGenerate} isLoading={isLoading} />
 
-      {error && (
-        <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-          {error}
-        </div>
-      )}
+        {error && (
+          <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded text-sm">
+            {error}
+          </div>
+        )}
 
-      <div className="mt-6">
-        <PlanView plan={currentPlan} onCopy={handleCopy} />
+        <PlanView plan={currentPlan} />
       </div>
     </div>
   );

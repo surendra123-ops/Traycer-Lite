@@ -1,7 +1,8 @@
 import { Plan } from '../types/planTypes';
 
+// Use a hardcoded API key for now (you can replace this with your actual key)
+const GEMINI_API_KEY = 'YOUR_ACTUAL_GEMINI_API_KEY_HERE';
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
-const API_KEY = process.env.GEMINI_API_KEY || 'YOUR_API_KEY_HERE';
 
 interface GeminiRequest {
   contents: Array<{
@@ -88,6 +89,13 @@ function parseAIResponse(responseText: string): Plan {
 
 export async function generateAIPlan(idea: string): Promise<Plan> {
   try {
+    // Check if API key is set
+    if (GEMINI_API_KEY === 'YOUR_ACTUAL_GEMINI_API_KEY_HERE') {
+      console.log('Gemini API key not set, falling back to rule-based planning');
+      const { generateRuleBasedPlan } = await import('./mode1Planner');
+      return generateRuleBasedPlan(idea);
+    }
+
     const prompt = createSmartPrompt(idea);
     
     const requestBody: GeminiRequest = {
@@ -98,7 +106,7 @@ export async function generateAIPlan(idea: string): Promise<Plan> {
       }]
     };
 
-    const response = await fetch(`${GEMINI_API_URL}?key=${API_KEY}`, {
+    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -107,6 +115,8 @@ export async function generateAIPlan(idea: string): Promise<Plan> {
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Gemini API error:', response.status, errorText);
       throw new Error(`API request failed: ${response.status}`);
     }
 
@@ -117,6 +127,7 @@ export async function generateAIPlan(idea: string): Promise<Plan> {
     }
 
     const responseText = data.candidates[0].content.parts[0].text;
+    console.log('Gemini response:', responseText);
     return parseAIResponse(responseText);
     
   } catch (error) {

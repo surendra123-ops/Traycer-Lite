@@ -6,6 +6,5 @@ export declare class PlanController {
     generatePlan(idea: string, mode: 'rule' | 'ai'): Promise<PlanResponse>;
     getCurrentPlan(): PlanResponse | null;
     getPlanHistory(): PlanResponse[];
-    copyToClipboard(format: 'json' | 'markdown'): Promise<void>;
 }
 //# sourceMappingURL=planController.d.ts.map
