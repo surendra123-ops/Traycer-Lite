@@ -10,7 +10,7 @@ export const PlanView: React.FC<PlanViewProps> = ({ plan }) => {
     return null;
   }
 
-  const { plan: planData, mode } = plan;
+  const { plan: planData } = plan;
 
   return (
     <div className="p-4 space-y-4">

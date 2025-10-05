@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { InputForm } from './components/InputForm';
 import { PlanView } from './components/PlanView';
 import { SavedPlans } from './components/SavedPlans';
 import { Navigation } from './components/Navigation';
-import { PlanResponse } from '../shared/types/planTypes';
+import { PlanResponse } from './types/planTypes';
 import { planService } from './services/planService';
 import './App.css';
 
