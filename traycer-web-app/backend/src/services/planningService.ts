@@ -141,7 +141,7 @@ User request: "${idea}"`;
       throw new Error(`API request failed: ${response.status}`);
     }
 
-    const data: GeminiResponse = await response.json();
+    const data = await response.json() as GeminiResponse;
     
     if (!data.candidates || data.candidates.length === 0) {
       throw new Error('No response from AI');
