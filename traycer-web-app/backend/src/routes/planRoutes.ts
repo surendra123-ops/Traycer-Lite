@@ -1,7 +1,7 @@
 import express from 'express';
 import { generateRuleBasedPlan, generateAIPlan } from '../services/planningService';
 import Plan from '../models/Plan';
-import { PlanRequest, PlanResponse } from '../../shared/types/planTypes';
+import { PlanRequest, PlanResponse } from '../types/planTypes';
 
 const router = express.Router();
 

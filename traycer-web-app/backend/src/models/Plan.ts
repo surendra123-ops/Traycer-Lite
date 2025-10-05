@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import { Plan, PlanningMode } from '../../shared/types/planTypes';
+import { Plan, PlanningMode } from '../types/planTypes';
 
 export interface ISavedPlan extends Document {
   idea: string;

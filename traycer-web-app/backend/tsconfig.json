@@ -12,12 +12,8 @@
     "rootDir": "./src",
     "declaration": true,
     "sourceMap": true,
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "../../shared/*": ["../shared/*"]
-    }
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*", "../shared/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

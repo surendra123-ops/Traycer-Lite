@@ -1,4 +1,4 @@
-import { Plan, PlanRequest } from '../../shared/types/planTypes';
+import { Plan, PlanRequest } from '../types/planTypes';
 
 // Rule-based planning (same logic as extension)
 const keywordMappings = [
