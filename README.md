@@ -310,5 +310,98 @@ Enable debug logging by opening Chrome DevTools:
 
 ---
 
+
+
+## 🏗️ Project Structure Breakdown
+
+### **Frontend Layer** (User Interface & Client-Side Logic)
+
+**`src/popup/` - The Main UI**
+- **`views/`** - React components (the actual UI)
+  - `InputForm.tsx` - Form where users enter project ideas
+  - `PlanView.tsx` - Displays the generated plans
+  - `index.tsx` - Main React app entry point
+- **`controllers/`** - UI logic layer
+  - `planController.ts` - Handles user interactions, talks to background script
+- **`models/`** - UI data management
+  - `planModel.ts` - Manages plan state and history in memory
+- **`popup.html`** - HTML container for the React app
+
+**`public/manifest.json`** - Extension configuration (tells Chrome how to run your extension)
+
+### **"Backend" Layer** (Business Logic & API Integration)
+
+**`src/background/` - The Extension's "Backend"**
+- **`index.ts`** - Main orchestrator, handles messages between popup and background
+- **`mode1Planner.ts`** - Rule-based planning logic (keyword matching)
+- **`mode2Planner.ts`** - AI planning logic (talks to Google Gemini API)
+
+**`src/types/planTypes.ts`** - TypeScript interfaces (data contracts)
+
+### **Build & Configuration**
+- **`webpack.config.js`** - Build system configuration
+- **`tsconfig.json`** - TypeScript compiler settings
+- **`package.json`** - Dependencies and scripts
+
+## 🗄️ Database Question: "Are we storing data in a database?"
+
+**Short answer: No traditional database, but we do store data locally.**
+
+Here's how data persistence works in your extension:
+
+### **Client-Side Storage (Browser's "Database")**
+
+Your extension uses **browser storage APIs** instead of a traditional database:
+
+1. **`chrome.storage.local`** - Primary storage mechanism
+   - Stores data locally in the browser
+   - Persists even when browser is closed
+   - Used for user preferences, saved plans, etc.
+
+2. **In-Memory Storage** - Temporary data
+   - `planModel.ts` keeps current plan and history in memory
+   - Data is lost when extension is reloaded
+
+### **External API Integration (Backend as a Service)**
+
+For AI-powered planning:
+- **Google Gemini API** - External backend service
+- Your extension sends user input → Gemini processes it → Returns structured plan
+- Gemini has its own database infrastructure (not yours)
+
+## 🔄 Data Flow Architecture
+
+```
+User Input → Popup UI → Controller → Background Script → AI API
+                ↓                           ↓
+            Local Storage ← Plan Model ← Response Processing
+```
+
+### **How Each Component Handles Data:**
+
+**Frontend (Popup):**
+- **InputForm**: Captures user input
+- **PlanView**: Displays results
+- **Controller**: Manages communication with background
+
+**"Backend" (Background Script):**
+- **mode1Planner**: Uses predefined keyword mappings (no external data)
+- **mode2Planner**: Calls Gemini API, processes responses
+
+**"Database" (Storage):**
+- **Browser Storage**: Persistent data (user preferences, saved plans)
+- **Memory**: Temporary data (current session, plan history)
+- **External API**: Gemini's database (not yours)
+
+## 🎯 Key Takeaways for a Junior Dev:
+
+1. **No Traditional Database**: This is a browser extension, not a web app with a server
+2. **Client-Side Storage**: Use `chrome.storage.local` for persistence
+3. **External APIs**: Gemini API acts as your "backend" for AI features
+4. **MVC Pattern**: Clean separation between UI, logic, and data
+5. **Service Worker**: Background script runs independently of the popup UI
+
+The "database thing" is handled through browser storage APIs and external service integration, not a traditional database server.
+
 **Traycer Lite** - Transform your ideas into structured development plans with the power of AI and intelligent rule-based planning.
 ```
