@@ -74,6 +74,17 @@ export function generateRuleBasedPlan(idea: string): Plan {
   return fallbackPlan;
 }
 
+// Define the Gemini API response interface
+interface GeminiResponse {
+  candidates: Array<{
+    content: {
+      parts: Array<{
+        text: string;
+      }>;
+    };
+  }>;
+}
+
 export async function generateAIPlan(idea: string): Promise<Plan> {
   const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
   const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
@@ -130,7 +141,7 @@ User request: "${idea}"`;
       throw new Error(`API request failed: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data: GeminiResponse = await response.json();
     
     if (!data.candidates || data.candidates.length === 0) {
       throw new Error('No response from AI');
