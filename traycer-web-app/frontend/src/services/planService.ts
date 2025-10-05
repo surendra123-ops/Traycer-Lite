@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { PlanRequest, PlanResponse, SavedPlan } from '../types/planTypes';
 
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://your-app-name.onrender.com' 
-  : 'http://localhost:3000';
+// Use Vite's environment variables
+const API_BASE_URL = import.meta.env.VITE_API_URL || 
+  (import.meta.env.DEV ? 'http://localhost:3000' : 'https://your-app-name.onrender.com');
 
 const api = axios.create({
   baseURL: API_BASE_URL,
