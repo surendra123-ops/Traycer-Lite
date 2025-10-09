@@ -3,7 +3,7 @@ import { PlanRequest, PlanResponse, SavedPlan } from '../types/planTypes';
 
 // Use Vite's environment variables
 const API_BASE_URL = import.meta.env.VITE_API_URL || 
-  (import.meta.env.DEV ? 'http://localhost:3000' : 'https://your-app-name.onrender.com');
+  (import.meta.env.DEV ? 'http://localhost:3000' : 'https://traycer-lite.onrender.com');
 
 const api = axios.create({
   baseURL: API_BASE_URL,
