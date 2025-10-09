@@ -30,6 +30,14 @@ app.use(limiter);
 // Logging
 app.use(morgan('combined'));
 
+   // Serve static files from frontend build
+   app.use(express.static(path.join(__dirname, '../public')));
+   
+   // Handle React routing, return index.html for all non-API routes
+   app.get('*', (req, res) => {
+     res.sendFile(path.join(__dirname, '../public/index.html'));
+   });
+
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
