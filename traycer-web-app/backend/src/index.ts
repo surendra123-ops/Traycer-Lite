@@ -43,6 +43,20 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Root route - provide API information
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Traycer API is running',
+    endpoints: {
+      health: '/health',
+      generatePlan: '/api/plans/generate',
+      savePlan: '/api/plans/save',
+      getPlans: '/api/plans/saved'
+    },
+    frontend: process.env.FRONTEND_URL || 'Frontend not deployed'
+  });
+});
+
 // Serve static files from frontend build (only in production)
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../public')));
@@ -50,11 +64,6 @@ if (process.env.NODE_ENV === 'production') {
   // Handle React routing, return index.html for all non-API routes
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
-  });
-} else {
-  // 404 handler for development (API only)
-  app.use('*', (req, res) => {
-    res.status(404).json({ error: 'Route not found' });
   });
 }
 
